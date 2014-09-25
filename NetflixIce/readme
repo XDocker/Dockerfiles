@@ -1,0 +1,20 @@
+1. to build the image run in the directory:
+
+docker build .
+
+2. When image is builded, run new container in interactive mode (put instead of 27faad5385c6 actual image ID):
+
+docker run -i 27faad5385c6 /bin/bash 
+
+3. Inside of container (prepare S3 billing bucket, AWS access key ID and AWS secret access key):
+
+./start.sh
+
+4. To stop running container from outside
+4.1. Get e list of running containers:
+
+docker ps
+
+4.2. Stop required
+
+docker stop $ID 
