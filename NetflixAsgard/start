@@ -1,25 +1,47 @@
 #!/bin/bash
 
-: ${AWS_ACCOUNT_ID?"Need to set AWS_ACCOUNT_ID"}
-: ${AWS_ACCESS_KEY_ID?"Need to set AWS_ACCESS_KEY_ID"}
-: ${AWS_SECRET_ACCESS_KEY?"Need to set AWS_SECRET_ACCESS_KEY"}
+#: ${AWS_ACCOUNT_ID?"Need to set AWS_ACCOUNT_ID"}
+#: ${AWS_ACCESS_KEY_ID?"Need to set AWS_ACCESS_KEY_ID"}
+#: ${AWS_SECRET_ACCESS_KEY?"Need to set AWS_SECRET_ACCESS_KEY"}
 
-mkdir -p /root/.asgard
+#mkdir -p /root/.asgard
 
-cat << 'EOF' > /root/.asgard/Config.groovy
-grails {
-  awsAccounts=['$AWS_ACCOUNT_ID']
-    awsAccountNames=['$AWS_ACCOUNT_ID':'prod']
-    }
-    secret {
-      accessId='$AWS_ACCESS_KEY_ID'
-        secretKey='$AWS_SECRET_ACCESS_KEY'
-}
-cloud {
-  accountName='prod'
-    publicResourceAccounts=['amazon']
-    }
-EOF
+#cat << 'EOF' > /root/.asgard/Config.groovy
+#grails {
+#  awsAccounts=['$AWS_ACCOUNT_ID']
+#    awsAccountNames=['$AWS_ACCOUNT_ID':'prod']
+#    }
+#    secret {
+#      accessId='$AWS_ACCESS_KEY_ID'
+#        secretKey='$AWS_SECRET_ACCESS_KEY'
+#}
+#cloud {
+#  accountName='prod'
+#    publicResourceAccounts=['amazon']
+#    }
+#EOF
+sed -i "s/asgardhost/$host/g" /etc/nginx/sites-available/asgard.conf
+
+
+openssl genrsa -des3 -passout pass:yourpassword -out server.key 2048
+openssl rsa -in server.key -out server.key.insecure -passin pass:yourpassword
+mv server.key server.key.secure
+mv server.key.insecure server.key
+
+openssl req -new -key server.key -out server.csr -subj "/C=US/ST=CA/L=Los Gatos/O=Global Security/OU=IT OPS/CN=asgard.com"
+openssl x509 -req -days 365  -in server.csr -signkey server.key -out server.crt
+
+cp server.crt /etc/ssl/certs
+cp server.key /etc/ssl/private
+
+mkdir -p /var/log/nginx/log
+touch /var/log/nginx/log/asgard.access.log
+touch /var/log/nginx/log/asgard.error.log
+ln -s /etc/nginx/sites-available/asgard.conf /etc/nginx/sites-enabled/asgard.conf
+rm /etc/nginx/sites-enabled/default
+
+echo "Starting nginx"
+service nginx restart
 
 export JAVA_OPTS=" \
       -verbose:sizes \
@@ -35,4 +57,4 @@ export JAVA_OPTS=" \
       -XX:+UseConcMarkSweepGC \
 "
 
-java -jar /opt/asgard/asgard-standalone.jar
+#java -jar /opt/asgard/asgard-standalone.jar >>/var/log/asgard.log &
