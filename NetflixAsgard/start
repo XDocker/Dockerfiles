@@ -2,6 +2,9 @@
 
 mkdir -p /root/.asgard
 
+echo "Adding credentials for Nginx..."
+echo $app_username":"$app_psw
+echo $app_username":"$app_psw > /etc/nginx/.htpasswd
 sed -i "s/asgardhost/$host/g" /etc/nginx/sites-available/asgard.conf
 
 
