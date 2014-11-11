@@ -17,7 +17,6 @@ ADD https://netflixoss.ci.cloudbees.com/job/asgard-master/lastStableBuild/artifa
 # script for starting with AWS creds from environment variables
 ADD start /opt/asgard/start
 
-ADD .htpasswd /etc/nginx/
 ADD asgard.conf /etc/nginx/sites-available/
 
 # Start asgard
