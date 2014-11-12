@@ -24,8 +24,15 @@ sed -i "s/ice.reader=false/ice.reader=true/g" /home/ice/src/java/ice.properties
 sed -i "s/ice.billing_s3bucketname=billing_s3bucketname1,billing_s3bucketname2/ice.billing_s3bucketname=$BILLING_BUCKET/g" /home/ice/src/java/ice.properties
 sed -i "s/ice.work_s3bucketname=work_s3bucketname/ice.work_s3bucketname=$BILLING_BUCKET/g" /home/ice/src/java/ice.properties
 sed -i "s/mnt/var\/cache/g" /home/ice/src/java/ice.properties
+sed -i "s/http:\/\/code.highcharts/https:\/\/code.highcharts/g" /home/ice/src/java/ice.properties
 #sed -i "s/localhost:8080/$host:443/g" /home/ice/grails-app/conf/Config.groovy
 sed -i "s/localhost/$host/g" /home/ice/grails-app/conf/Config.groovy
+
+echo "Adding credentials for Nginx..."
+echo $app_username":"$app_psw
+echo $app_username":"$app_psw > /etc/nginx/.htpasswd
+sed -i "s/icehost/$host/g" /etc/nginx/sites-available/netflix-ice.conf
+
 
 openssl genrsa -des3 -passout pass:yourpassword -out server.key 2048
 openssl rsa -in server.key -out server.key.insecure -passin pass:yourpassword
