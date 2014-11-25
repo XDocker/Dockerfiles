@@ -1,0 +1,16 @@
+To configure:
+
+1. Dockerfile  
+Set AWS access key(AWS_ACCESS_KEY_ID) and AWS secret key (AWS_SECRET_ACCESS_KEY)
+
+2. ice.properties  
+Set BILLING_BUCKET
+
+3. netflix-ice.conf  
+Set ICEHOST
+
+4.  server.crt  server.key
+Regenerate/set actual SSL keys
+
+5. .htpasswd
+Add user. Now admin / Xervmon
