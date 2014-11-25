@@ -2,7 +2,7 @@
 
 FROM netflixoss/java:7
 #FROM xdocker/netflix_ice:latest
-MAINTAINER Xervmon
+MAINTAINER Xdocker
 EXPOSE 443
 
 # OS update & cloning from git
