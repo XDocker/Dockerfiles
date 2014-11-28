@@ -1,6 +1,6 @@
 # XDocker
 FROM ubuntu:14.04
-MAINTAINER Xervmon
+MAINTAINER xDocker
 EXPOSE 80
 EXPOSE 443
 ENV DEBIAN_FRONTEND noninteractive
